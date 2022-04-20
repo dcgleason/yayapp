@@ -3,7 +3,6 @@ const router = express.Router()
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
 const config = require('./config.js');
-const bodyParser = require('body-parser')
 const cors = require('cors')
 const app = express();
 const path = require('path');
@@ -11,9 +10,11 @@ const axios = require('axios');
 const pg = require('pg')
 var id_queue = []
 var array = []
-const schedule = require('node-schedule');
-var jsonParser = bodyParser.json()
-var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
+let dotenv = require('dotenv');
+
+// if .env file is located in root directory
+dotenv.config()
 
 app.use(cors())
 app.use(express.json())
@@ -61,7 +62,7 @@ var id = req.body.message_id;
 axios
 .get(`https://gmail.googleapis.com/gmail/v1/users/admin@youandyours.io/messages/${id}`,{
   headers: {
-    authorization: 'Bearer ya29.A0ARrdaM-u09VlHCsORup9s2hhplX56rXI1vhe9zUEKKB95fSFM2LeoSmSOE4OILRp5wOibCkwEnva3uoQswGDcY1dckBNXp0OuF2qa7Ie_BktxkM0E5Z-_pMxNgFBR3Bw_qCRtjIu8p8p-egSZC_rN09I3ed_hA'
+    authorization: `Bearer ${process.env.GMAIL_AUTH_BEARER_TOKEN}`
   }
 })
 .then(result => {
@@ -83,7 +84,7 @@ app.post('/messages', async (req,res) =>{
 axios
 .get(`https://gmail.googleapis.com/gmail/v1/users/admin@youandyours.io/messages?q=in:sent subject:${unique_id}`,{
   headers: {
-    authorization: 'Bearer ya29.A0ARrdaM-u09VlHCsORup9s2hhplX56rXI1vhe9zUEKKB95fSFM2LeoSmSOE4OILRp5wOibCkwEnva3uoQswGDcY1dckBNXp0OuF2qa7Ie_BktxkM0E5Z-_pMxNgFBR3Bw_qCRtjIu8p8p-egSZC_rN09I3ed_hA'
+    authorization: `Bearer ${process.env.GMAIL_AUTH_BEARER_TOKEN}`
   }
 })
 .then(result => {
@@ -121,9 +122,9 @@ app.post('/email', (req, res) => {
   console.log('inside post request' + unique_id);
     const OAuth2 = google.auth.OAuth2
   
-    const OAuth2_client = new OAuth2(config.client_id, config.client_secret);
+    const OAuth2_client = new OAuth2(process.env.GMAIL_CLIENT_ID, process.env.GMAIL_CLIENT_SECRET);
 
-    OAuth2_client.setCredentials( { refresh_token: config.refresh_token } );
+    OAuth2_client.setCredentials( { refresh_token: process.env.GMAIL_REFRESH_TOKEN } );
 
     const accessToken = OAuth2_client.getAccessToken();
 
@@ -131,10 +132,10 @@ app.post('/email', (req, res) => {
     service: 'gmail',
     auth: {
         type: 'OAuth2',
-        user: config.user,
-        clientId: config.client_id,
-        clientSecret: config.client_secret,
-        refreshToken: config.refresh_token,
+        user: process.env.GMAIL_USER,
+        clientId: process.env.GMAIL_CLIENT_ID,
+        clientSecret: process.env.GMAIL_CLIENT_SECRET,
+        refreshToken: process.env.GMAIL_REFRESH_TOKEN,
         accessToken: accessToken
     }
   })
@@ -170,95 +171,13 @@ app.post('/bundle', (req, res) => {
   bundle_model.createBundle(objCreate);
 });
 
-// for(var i = 0; i<id_queue.length; i ++){
-  
-//   axios
-//     .get(`https://gmail.googleapis.com/gmail/v1/users/admin@youandyours.io/messages?q=in:inbox subject: ${unique_id[i].id}`,{
-//       headers: {
-//         authorization: 'Bearer ya29.A0ARrdaM_QR6iOrS2FxWK0BJD0RiovS0j9KL86YiXzaYWVusvNv2btGzoh19H3CGoJsrCETyKttimOSNZQhzgNvsN37r6DQjXf_0LMj-jf4yVHRlKwZlcoiRmBucYhvXnonbb1ob9xwEAxBgxWBkloNBbyzQX6'
-//       }
-//     })
-//     .then(res => {
-//       console.log(`statusCode: ${res.status}`)
-//       console.log(res.data)
-//     })
-//     .catch(error => {
-//       console.error(error)
-//     })
-
-
-  
-  // }
-
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
 
 
-
-
-
 // Static folder
 app.use('/access', express.static(path.join(__dirname, 'access')));
 
-
-
-
-
-
 module.exports = id_queue;
-
-
-
-
-// const listMessages = (auth, query) => {  
-//   return new Promise((resolve, reject) => {    
-//     const gmail = google.gmail({version: 'v1', auth});    
-//     gmail.users.messages.list(      
-//       {        
-//         userId: 'me',        
-//         q: query,      
-//       },   
-
-//       (err, res) => {        
-//         if (err) { 
-//           reject(err);          
-//           return;        
-//         }        
-//         if (!res.data.messages) { 
-//           resolve([]);          
-//           return;        
-//         }               
-//         resolve(res.data.messages); 
-//       }    
-//     );  
-//   })
-// ;}
-
-
-//messagesObj.forEach(msg => { modifyLabels(OAuth2_client, msg.id, ['star']);})
-
-// modifyLabels = (auth, message_id, addLabelIds, removeLabelIds) => {  
-//   return new Promise((resolve, reject) => {    
-//     const gmail = google.gmail({version: 'v1', auth});    
-//     gmail.users.messages.modify(      
-//       {        
-//         id: message_id,        
-//         userId: 'me',        
-//         resource: {          
-//           addLabelIds          
-//           //removeLabelIds,        
-//         },      
-//       },            
-//       (err, res) => {        
-//         if (err) { 
-//           reject(err);          
-//           return;        
-//         }               
-//         resolve(res);        
-//         return;      
-//       }    
-//     );  
-//   });
-// }
