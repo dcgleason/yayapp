@@ -32,8 +32,6 @@ app.use(function (req, res, next) {
 });
 
 
-
-
 app.get('/', (req, res) => {
   bundle_model.getBundles()
   .then(response => {
