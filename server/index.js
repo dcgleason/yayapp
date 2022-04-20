@@ -22,7 +22,6 @@ app.use(express.json())
 const PORT = process.env.PORT || 3001;
 
 const bundle_model = require('./db_functions.js');
-const { job } = require("cron");
 
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -32,26 +31,26 @@ app.use(function (req, res, next) {
 });
 
 
-app.get('/', (req, res) => {
-  bundle_model.getBundles()
-  .then(response => {
-    res.status(200).send(response);
-  })
-  .catch(error => {
-    res.status(500).send(error);
-  })
-})
+// app.get('/', (req, res) => {
+//   bundle_model.getBundles()
+//   .then(response => {
+//     res.status(200).send(response);
+//   })
+//   .catch(error => {
+//     res.status(500).send(error);
+//   })
+// })
 
 
-app.delete('/bundle/:id', (req, res) => {
-  bundle_model.deleteBundle(req.params.id)
-  .then(response => {
-    res.status(200).send(response);
-  })
-  .catch(error => {
-    res.status(500).send(error);
-  })
-})
+// app.delete('/bundle/:id', (req, res) => {
+//   bundle_model.deleteBundle(req.params.id)
+//   .then(response => {
+//     res.status(200).send(response);
+//   })
+//   .catch(error => {
+//     res.status(500).send(error);
+//   })
+// })
 
 app.post('/message', async (req,res) =>{
 
