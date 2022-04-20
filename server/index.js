@@ -34,13 +34,7 @@ app.use('/', express.static(__dirname + '/client', {index: "index.html"}));
 
 
 app.get('/', (req, res) => {
-  bundle_model.getBundles()
-  .then(response => {
-    res.status(200).send(response);
-  })
-  .catch(error => {
-    res.status(500).send(error);
-  })
+  res.send("Hello Geeks");
 })
 
 
@@ -175,8 +169,11 @@ app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
 
-
 // Static folder
 app.use('/access', express.static(path.join(__dirname, 'access')));
+
+app.get("*", function (req, res) {
+  res.render("Error_page");   
+});
 
 module.exports = id_queue;
