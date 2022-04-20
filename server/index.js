@@ -30,16 +30,18 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use('/', express.static(__dirname + '/client', {index: "index.html"}));
 
-// app.get('/', (req, res) => {
-//   bundle_model.getBundles()
-//   .then(response => {
-//     res.status(200).send(response);
-//   })
-//   .catch(error => {
-//     res.status(500).send(error);
-//   })
-// })
+
+app.get('/', (req, res) => {
+  bundle_model.getBundles()
+  .then(response => {
+    res.status(200).send(response);
+  })
+  .catch(error => {
+    res.status(500).send(error);
+  })
+})
 
 
 // app.delete('/bundle/:id', (req, res) => {
