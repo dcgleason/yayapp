@@ -17,56 +17,32 @@ let dotenv = require('dotenv');
 // if .env file is located in root directory
 dotenv.config()
 
-async function createServer() {
+const { App } = require( '../src/components/app' ); 
 
-const vite = await createViteServer({
+app.get( /\.(js|css|map|ico)$/, express.static( path.resolve( __dirname, '../dist' ) ) );
 
-  server: { middlewareMode: 'ssr' }
-})
-// use vite's connect instance as middleware
-app.use(vite.middlewares)
+// for any other requests, send `index.html` as a response
+app.use( '*', ( req, res ) => {
 
-app.use('*', async (req, res) => {
-  const url = req.originalUrl
+    // read `index.html` file
+    let indexHTML = fs.readFileSync( path.resolve( __dirname, '../dist/index.html' ), {
+        encoding: 'utf8',
+    } );
 
-  try {
-    // 1. Read index.html
-    let template = fs.readFileSync(
-      path.resolve(__dirname, '../index.html'),
-      'utf-8'
-    )
+    // get HTML string from the `App` component
+    let appHTML = ReactDOMServer.renderToString( <App /> );
 
-    // 2. Apply Vite HTML transforms. This injects the Vite HMR client, and
-    //    also applies HTML transforms from Vite plugins, e.g. global preambles
-    //    from @vitejs/plugin-react
-    template = await vite.transformIndexHtml(url, template)
+    // populate `#app` element with `appHTML`
+    indexHTML = indexHTML.replace( '<div id="app"></div>', `<div id="app">${ appHTML }</div>` );
 
-    // 3. Load the server entry. vite.ssrLoadModule automatically transforms
-    //    your ESM source code to be usable in Node.js! There is no bundling
-    //    required, and provides efficient invalidation similar to HMR.
-    const { render } = await vite.ssrLoadModule('../src/main.jsx')
+    // set header and status
+    res.contentType( 'text/html' );
+    res.status( 200 );
 
-    // 4. render the app HTML. This assumes entry-server.js's exported `render`
-    //    function calls appropriate framework SSR APIs,
-    //    e.g. ReactDOMServer.renderToString()
-    const appHtml = await render(url)
+    return res.send( indexHTML );
+} );
 
-    // 5. Inject the app-rendered HTML into the template.
-    const html = template.replace(`<!--ssr-outlet-->`, appHtml)
 
-    // 6. Send the rendered HTML back.
-    res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
-  } catch (e) {
-    // If an error is caught, let Vite fix the stracktrace so it maps back to
-    // your actual source code.
-    vite.ssrFixStacktrace(e)
-    next(e)
-  }
-})
-
-}
-
-createServer();
 
 app.use(cors())
 app.use(express.json())
