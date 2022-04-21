@@ -19,7 +19,7 @@ dotenv.config()
 
 const { App } = require( '../src/components/app' ); 
 
-app.get( /\.(js|css|map|ico)$/, express.static( path.resolve( __dirname, '../dist' ) ) );
+app.get( '/', express.static( path.resolve( __dirname, '../dist' ) ) );
 
 // for any other requests, send `index.html` as a response
 app.use( '*', ( req, res ) => {
