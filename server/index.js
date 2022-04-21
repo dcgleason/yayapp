@@ -31,10 +31,6 @@ app.use(function (req, res, next) {
 });
 
 
-app.get('/', (req, res) => {
-  res.send("Hello Geeks");
-})
-
 
 // app.delete('/bundle/:id', (req, res) => {
 //   bundle_model.deleteBundle(req.params.id)
