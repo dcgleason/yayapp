@@ -10,18 +10,14 @@ const axios = require('axios');
 const pg = require('pg')
 var id_queue = []
 var array = []
-const { createServer: createViteServer } = require('vite')
 
 let dotenv = require('dotenv');
 
 // if .env file is located in root directory
 dotenv.config()
 
-const { App } = require( '../src/components/app' ); 
+const { App } = require( '../src/App' ); 
 
-//app.get( '/', express.static( path.resolve( __dirname, '../dist/index.html' ) ) );
-
-// for any other requests, send `index.html` as a response
 app.use( '/', ( req, res ) => {
 
     // read `index.html` file
