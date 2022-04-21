@@ -16,32 +16,9 @@ let dotenv = require('dotenv');
 // if .env file is located in root directory
 dotenv.config()
 
-const { App } = require( '../src/App' ); 
-
 app.get('/', (req, res) =>{
   res.send('ok');
 })
-
-app.use( '*', ( req, res ) => {
-
-    // read `index.html` file
-    let indexHTML = fs.readFileSync( path.resolve( __dirname, '../dist/index.html' ), {
-        encoding: 'utf8',
-    } );
-
-    // get HTML string from the `App` component
-    let appHTML = ReactDOMServer.renderToString( <App /> );
-
-    // populate `#app` element with `appHTML`
-    indexHTML = indexHTML.replace( '<div id="app"></div>', `<div id="app">${ appHTML }</div>` );
-
-    // set header and status
-    res.contentType( 'text/html' );
-    res.status( 200 );
-
-    return res.send( indexHTML );
-} );
-
 
 
 app.use(cors())
@@ -194,8 +171,5 @@ app.listen(PORT, () => {
 // Static folder
 app.use('/access', express.static(path.join(__dirname, 'access')));
 
-app.get("*", function (req, res) {
-  res.render("Error_page");   
-});
 
 module.exports = id_queue;

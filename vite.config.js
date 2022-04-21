@@ -12,36 +12,10 @@ const { resolve } = require('path')
 module.exports = defineConfig({
   plugins: [react()],
   proxy: {
-    '/messages': {
-         target: 'https://localhost:3001',
-         changeOrigin: true,
-         secure: false,      
-         ws: true,
-     },
-     '/message': {
-      target: 'https://localhost:3001',
-      changeOrigin: true,
-      secure: false,      
-      ws: true,
-  },
-  '/email': {
-    target: 'https://localhost:3001',
-    changeOrigin: true,
-    secure: false,      
-    ws: true,
-},
-'/bundle': {
-  target: 'https://localhost:3001',
-  changeOrigin: true,
-  secure: false,      
-  ws: true,
-}
-},
-  build: {
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html')
-      }
-    }
+    '/api': 'http://localhost:3001/api',
+    '/message': 'http://localhost:3001/message',
+    '/messages': 'http://localhost:3001/messages',
+    '/bundle': 'http://localhost:3001/bundle'
   }
+
 })
