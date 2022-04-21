@@ -18,7 +18,11 @@ dotenv.config()
 
 const { App } = require( '../src/App' ); 
 
-app.use( '/', ( req, res ) => {
+app.get('/', (req, res) =>{
+  res.send('ok');
+})
+
+app.use( '*', ( req, res ) => {
 
     // read `index.html` file
     let indexHTML = fs.readFileSync( path.resolve( __dirname, '../dist/index.html' ), {
