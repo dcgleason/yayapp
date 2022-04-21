@@ -19,10 +19,10 @@ dotenv.config()
 
 const { App } = require( '../src/components/app' ); 
 
-app.get( '/', express.static( path.resolve( __dirname, '../dist' ) ) );
+//app.get( '/', express.static( path.resolve( __dirname, '../dist/index.html' ) ) );
 
 // for any other requests, send `index.html` as a response
-app.use( '*', ( req, res ) => {
+app.use( '/', ( req, res ) => {
 
     // read `index.html` file
     let indexHTML = fs.readFileSync( path.resolve( __dirname, '../dist/index.html' ), {
