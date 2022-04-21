@@ -30,8 +30,6 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use('/', express.static(__dirname + '/client', {index: "index.html"}));
-
 
 app.get('/', (req, res) => {
   res.send("Hello Geeks");

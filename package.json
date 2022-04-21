@@ -1,26 +1,20 @@
 {
-  "name": "youandyours",
-  "version": "1.0.0",
-  "proxy": "http://http://localhost:3001/api",
-  "description": "",
-  "main": "index.js",
+  "name": "vite-project",
+  "private": true,
+  "version": "0.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.js",
-    "dev": "cd client && npm install && npm run dev"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server/index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "add": "^2.0.6",
     "axios": "^0.26.1",
-    "body-parser": "^1.20.0",
     "cors": "^2.8.5",
-    "cron": "^1.8.2",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "googleapis": "^39.2.0",
+    "googleapis": "^100.0.0",
     "node-fetch": "^3.2.3",
     "node-postgres": "^0.6.2",
     "node-schedule": "^2.1.0",
@@ -28,14 +22,18 @@
     "nodemon": "^2.0.15",
     "pg": "^8.7.3",
     "pg-format": "^1.0.4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-uuid": "^1.0.2",
     "uuid": "^8.3.2",
     "uuidv4": "^6.2.13",
     "yarn": "^1.22.18"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^1.0.7",
     "autoprefixer": "^10.4.4",
     "postcss": "^8.4.12",
-    "tailwindcss": "^3.0.23"
+    "tailwindcss": "^3.0.24",
+    "vite": "^2.9.0"
   }
 }
